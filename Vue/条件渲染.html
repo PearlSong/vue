@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/vue/1.0.14/vue.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+</head>
+<body id="app">
+<!--条件渲染-->
+<!--v-if-->
+<h1 v-if="'ok'">Yes</h1>
+<h1 v-else>No</h1>
+<!--template-if-->
+<template v-if="'ok'">
+    <h1>title</h1>
+    <h1>paragraph 1</h1>
+    <h1>paragraph 2</h1>
+</template>
+<!--v-else-->
+<div v-if="Math.random()>0.6">sorry</div>
+<div v-else>not sorry</div>
+<!--v-show-->
+<h1 v-show="'ok'">hello</h1>
+<ul id="example-2">
+    <li v-for="(item, index) of items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+    </li>
+</ul>
+<ul id="exampleFor-2">
+    <li v-for="(item, index) of items">
+        {{parentMessage}}-{{index}}-{{item.message}}
+    </li>
+</ul>
+</body>
+</html>
+<script>
+    var vm=new Vue({
+        el:'#app'
+    });
+    var example2 = new Vue({
+        el: '#example-2',
+        data: {
+            parentMessage: 'Parent',
+            items: [
+                { message: 'Foo' },
+                { message: 'Bar' }
+            ]
+        }
+    })
+    var vmFor2=new Vue({
+        el:"#exampleFor-2",
+        data:{
+            parentMessage:"Parent",
+            items:[{
+                message:'Foo'
+            },{
+                message:'Bar'
+            }]
+        }
+    });
+</script>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="js/vue.js"></script>
+</head>
+<body>
+<div id="app">{{message}}</div>
+
+<!--双向绑定-->
+<div id="appInput">
+    <p>{{message}}</p>
+    <input v-model="message"/>
+</div>
+
+<!--渲染列表-->
+<div id="appUl">
+    <ul>
+        <li v-for="todo in todos">{{todo.text}}</li>
+    </ul>
+</div>
+
+<!--处理用户输入-->
+<div id="appBtn">
+    <p>{{message}}</p>
+    <button v-on:click="reverseMessage">reverse message</button>
+</div>
+
+<!--综合-->
+<div id="appGeneral">
+    <input v-model="newTodo" v-on:keyup.enter="addTodo"/>
+    <ul>
+        <li v-for="todo in todos">
+            <span>{{todo.text}}</span>
+            <button v-on:onclick="removeTodo($index)">delete</button>
+        </li>
+    </ul>
+</div>
+<!--概述-->
+<div id="example-1">
+    Hello {{name}}!
+</div>
+<!--组件系统-->
+<div id="appSystem">
+    <app-nav></app-nav>
+    <app-view>
+        <app-sidebar></app-sidebar>
+        <app-content></app-content>
+    </app-view>
+</div>
+
+<!--基础-计算属性-->
+<div id="calProperty">
+    <p>{{message}}</p>
+    <p>{{reversedMessage}}</p>
+</div>
+
+<!--计算属性-watch property-->
+<div id="watchPro">{{fullName}}</div>
+
+<!--观察Watchers-->
+<div id="watchExa">
+    <p>say something: <input v-model="question"/></p>
+    <p>{{answer}}</p>
+</div>
+
+<!--Class 与 Style 绑定-->
+<!--下面的语法表示class active的更新取决于数据属性isActive是否为真值-->
+<div v-bind:class="{active:isActive}"></div>
+<div class="static" v-bind:class="{active:iActive,'text-danger':hasError}"></div>
+<!--data如下
+    data:{
+        isActive:true,
+        hasError:false
+    }
+-->
+<!--渲染为-->
+<div class="static active"></div>
+<!--直接绑定数据里的一个对象-->
+<div v-bind:class="classObject"></div>
+<!--
+    data:{
+        classObject:{
+            active:true,
+            'text-danger':false
+        }
+    }
+-->
+<!--绑定返回对象的计算属性-->
+<div v-bind:class="classObj"></div>
+<!--
+    data:{
+        isActive:true,
+        error:null
+    },
+    computed:{
+        classObj:function(){
+            return {
+                active:this.isActive && !this.error,
+                "text-danger":this.error && this.error.type==='fatal'
+            }
+        }
+    }
+-->
+
+<!--数组与法-->
+<div v-bind:class="[activeClass,errorClass]"></div>
+<!--
+    data:{
+        activeClass:'active',
+        errorClass:'text-danger'
+    }
+-->
+<!--渲染为-->
+<div v-bind:class="active text-danger"></div>
+<!--根据条件切换列表中的class，下例中isActive只有为true时才添加activeClass-->
+<div v-bind:class="[isActive?activeClass:'',errorClass]"></div>
+<!--当有多个条件class时这样写有些繁琐，可以在数组语法中使用对象语法-->
+<div v-bind:class="[{isActive:activeClass},errorClass]"></div>
+
+<!--With Components-->
+<my-component class="baz boo"></my-component>
+<!--渲染为-->
+<my-component class="foo bar baz boo"></my-component>
+<my-component v-bind:class="{active:isActive}"></my-component>
+<!--如果isActive为true，渲染为-->
+<div class="foo bar active"></div>
+
+<!--绑定内联样式-->
+<!--对象语法-->
+<div v-bind:style="{color:activeColor,fontSize:fontSize+'px'}"></div>
+<!--
+    data:{
+        activeColor:'red',
+        fontSize:30
+    }
+-->
+<!--直接绑定样式对象-->
+<div v-bind:style="styleObject"></div>
+<!--
+    data:{
+        styleObject:{
+            color:'red',
+            fontSize:'13px'
+        }
+    }
+-->
+<!--数组与法-->
+<div v-bind:style="[baseStyle,overridingStyle]"></div>
+<!--自动添加前缀-->
+<!--当v-bind:style使用需要特定前缀的CSS属性时，如 transform Vue.js会自动侦测并添加相应的前缀-->
+
+<!--条件渲染-->
+<div id="appIf">
+    <!--v-if-->
+    <h1 v-if="ok">Yes</h1>
+    <h1 v-else>No</h1>
+    <!--template-if-->
+    <template v-if="ok">
+        <h1>title</h1>
+        <h1>paragraph 1</h1>
+        <h1>paragraph 2</h1>
+    </template>
+    <!--v-else-->
+    <div v-if="Math.random()>0.6">sorry</div>
+    <div v-else>not sorry</div>
+    <!--v-show-->
+    <h1 v-show="ok">hello</h1>
+</div>
+
+<!--列表渲染-->
+<div id="appFor">
+    <!-- 基本用法-->
+    <ul id="exampleFor-1">
+        <li v-for="item in items">
+            {{item.message}}
+        </li>
+    </ul>
+</div>
+<!--在 v-for 块中，我们拥有对父作用域属性的完全访问权限。 v-for 还支持一个可选的第二个参数为当前项的索引 -->
+<ul id="exampleFor-2">
+    <li v-for="(item, index) in items">
+        {{parentMessage}}-{{index}}-{{item.message}}
+    </li>
+</ul>
+<ul id="example-2">
+    <li v-for="(item, index) in items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+    </li>
+</ul>
+<!--Template v-for-->
+<ul>
+    <template v-for="item in items">
+        <li>{{item.msg}}</li>
+        <li class="divider"></li>
+    </template>
+</ul>
+</body>
+</html>
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+<script>
+
+    new Vue({
+        el:'#app',
+        data:{
+            message:'Hello world!'
+        }
+    });
+    //双向绑定
+    new Vue({
+        el:'#appInput',
+        data:{
+            message:'Hello world!'
+        }
+    });
+    //渲染列表
+    new Vue({
+        el:'#appUl',
+        data:{
+            todos:[
+                {text:'learn javascript!'},
+                {text:'learn vue.js!'},
+                {text:'learn angular!'}
+            ]
+        }
+    });
+    //处理用户输入
+    new Vue({
+        el:"#appBtn",
+        data:{
+            message:'Hello world!'
+        },
+        methods:{
+            reverseMessage:function(){
+                this.message=this.message.split('').reverse().join('');
+            }
+        }
+    });
+    //综合
+    new Vue({
+        el:"#appGeneral",
+        data:{
+            newTodo:"",
+            todos:[{
+                text:"Add some todos"
+            }]
+        },
+        methods:{
+            addTodo:function(){
+                var text=this.newTodo.trim();
+                if(text){
+                    this.todos.push({text:text});
+                    this.newTodo="";
+                }
+            },
+            removeTodo:function(index){
+                this.todos.splice(index,1)
+            }
+        }
+    });
+
+    //概述
+    //model
+    var exampleData={
+        name:"Vue.js"
+    };
+    //创建一个vue实例或者"ViewModel"
+    //它连接View与Model
+    var exampleVM=new Vue({
+        el:"#example-1",
+        data:exampleData
+    });
+
+    //创建一个根实例
+    var vm=new Vue({
+
+    });
+    //vue的扩展选项
+    var myComponent=Vue.extend({
+        //扩展选项
+    });
+    //所有的'myComponent'实例都将以预定的扩展选项被创建
+    var myComponentInstance=new myComponent();
+    //每个Vue实例都会代理其data对象里的所有的属性：
+    var data={a:1};
+    var vmData=new Vue({
+        data:data
+    });
+    console.log(vmData.a===data.a);
+    vmData.a=2;
+    console.log(data.a);
+    data.a=3;
+    console.log(vmData.a);
+    console.log(vmData.$data===data);
+
+    vmData.$watch("a",function(newVal,oldVal){
+        //这个回调方法会在 a 改变后调用
+    });
+
+    //基础-计算属性
+    var vmCalPro=new Vue({
+        el:'#calProperty',
+        data:{
+            message:'Hello'
+        },
+        computed:{
+            reversedMessage:function(){
+                return this.message.split('').reverse().join('')
+            }
+        }
+    });
+    vmCalPro.message='hahhahah123';
+    console.log(vmCalPro.reversedMessage);
+
+    //计算属性-watch property
+    var vmWatchPro=new Vue({
+        el:'#watchPro',
+        //watch property
+        /*data:{
+            firstName:'Foo',
+            lastName:'Bar',
+            fullName:'Foo Bar'
+        },
+        watch:{
+            firstName:function(val){
+                this.fullName=val+' '+this.lastName
+            },
+            lastName:function(val){
+                this.fullName=this.firstName+' '+val
+            }
+        }*/
+        data:{
+            firstName:'Foo',
+            lastName:'Bar'
+        },
+        //计算属性
+        /*computed:{
+            fullName:function(){
+                return this.firstName+' '+this.lastName;
+            }
+        }*/
+        //setter
+        computed:{
+            fullName:{
+                get:function(){
+                    return this.firstName+' '+this.lastName;
+                },
+                set:function(newValue){
+                    var name=newValue.split(' ');
+                    this.firstName=name[0];
+                    this.lastName=name[name.length-1];
+                }
+            }
+        }
+    });
+    vmWatchPro.fullName='John Doe';
+
+    //观察Watchers
+    var vmWatch=new Vue({
+        el:'#watchExa',
+        data:{
+            question:'',
+            answer:'I cannot give you any answer until you say something!'
+        },
+        watch:{
+            //如果question发生改变，这个函数就会运行
+            question:function(newQuestion){
+                this.answer='waiting for you to stop typing...';
+                this.getAnswer();
+            }
+        },
+        methods:{
+            //_.debounce 是一个通过lodash限制操作频率的函数
+            //这个例子限制访问yesno.wtf/api的频率
+            //ajax请求知道用户输入完毕才会发出
+            //学习更多：https://lodash.com/docs#debounce
+            getAnswer: _.debounce(
+                    function(){
+                        var vm=this;
+                        if(this.question.indexOf('?')===-1){
+                            vm.answer='Questions usually contain a question mark. ;-)';
+                            return;
+                        }
+                        vm.answer='thinking';
+                        axios.get('https://yesno.wtf/api')
+                        .then(function(response){
+                            vm.answer= _.capitalize(response.data.answer)
+                        })
+                                .catch(function(error){
+                                    vm.answer='Error! Could not reach the API.'+error
+                                })
+                    },
+                    500//用户停止输入等待的毫秒数
+            )
+        }
+    });
+
+    //Class 与 Style 绑定
+
+    //With Components
+    Vue.component('my-component',{
+        template:'<p class="foo bar">Hi</p>'
+    });
+
+    //条件渲染
+    new Vue({
+        el:"#appIf"
+    });
+
+    //列表渲染
+    var vmFor=new Vue({
+        el:"#appFor",
+//        el:"#exampleFor-1",
+        data:{
+            parentMessage:"Parent",
+            items:[{
+                message:'Foo'
+            },{
+                message:'Bar'
+            }]
+        }
+    });
+    var vmFor2=new Vue({
+        el:"#exampleFor-2",
+        data:{
+            parentMessage:"Parent",
+            items:[{
+                message:'Foo'
+            },{
+                message:'Bar'
+            }]
+        }
+    });
+    var example2 = new Vue({
+        el: '#example-2',
+        data: {
+            parentMessage: 'Parent',
+            items: [
+                { message: 'Foo' },
+                { message: 'Bar' }
+            ]
+        }
+    })
+    /*foo();
+    if( false){
+        function foo(){
+            alert(1);
+        }
+    }else{
+        function foo(){
+            alert(2);
+        }
+    }*/
+
+    //匹配T之前的内容
+    /*var string='2016-09-20T09:20:07.00Z';
+     console.log(string.split("T")[0]);
+
+     var substr = string.match(/(\S*)T/);
+     console.log(substr[1]);*/
+
+
+</script>

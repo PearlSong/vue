@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div id="example">
+        <button @click="plus">+</button>
+        <p>数量:{{number}}</p>
+        <p>单价:{{price}}</p>
+        <hr>
+        <p>总价:{{Total}}</p>
+        <button @click="reduce">-</button>
+    </div>
+    <script>
+    var vm = new Vue({
+        el: "#example",
+        data:{
+            number:0,
+            price:10,
+            Total:0
+        },
+        methods:{
+            plus:function() {
+                this.number++;
+                this.Total = this.number + this.price;
+            },
+            reduce:function() {
+                this.number--;
+                this.number < 0 ? this.number = 0 : this.number;
+                this.Total=this.number+this.price;
+            }
+        },
+        watch:{
+            'number': function(newVal, oldVal) {
+                console.log(newVal);
+                console.log(oldVal);
+                if (this.number > 3) {
+                    this.Total = this.Total - this.price;
+                }
+                alert(newVal);
+            }
+        }
+
+    });
+    </script>
+</body>
+
+</html>
+<script>
+    /*var a = 9;
+    function fn() {
+        a = 0;
+        return function (b) {
+            return b + a++;
+        }
+    }
+    var f = fn();
+    var m = f(5);
+    alert(m);
+    var n = fn()(5);
+    alert(n);
+    var x = f(5);
+    alert(x);
+    alert(a);
+
+    function fn1() {
+        alert(5)
+    };
+    function fn2() {
+        alert(6)
+    };
+    var fn3 = fn1.call;
+    fn1.call(fn2);
+    fn3.call(fn1);*/
+
+   /* this.aa=66;
+    var o={
+        aa:5,
+        fn:function(){
+            function go(){
+                this.aa=10;
+                console.log(this.aa);
+            }
+            return go;
+        }
+    };
+    o.fn()();*/
+
+    /*this.a=20;
+    var test={
+        a:36,
+        init:function(){
+            function go(){
+                //this.a=60;
+                console.log(this.a);
+            }
+            go.prototype.a=50;
+            return go;
+        }
+    }
+    test.init()();
+    var p=test.init();
+    p();
+    new (test.init())();*/
+
+    var test=(function(a){
+        this.a=a;
+        return function(b){
+            return this.a+b;
+        }
+    }(function(a,b){
+        return a;
+    }(1,2)));
+    console.log(4);
+</script>
